@@ -13,13 +13,19 @@
 		<p:tabView id="tabNota">
 		<p:tab title="Dados da Nota">		
 		<h:form>
+		    <h:messages styleClass="erros" />
 			<fieldset>
 				<legend>Dados da Nota</legend>
 				<h:outputLabel value="CNPJ Cliente:" for="cnpj" />
 				<p:inputMask id="cnpj" value="#{notaFiscalMB.notaFiscal.cnpj}" mask="99.999.999/9999-99"/>
 				<h:outputLabel value="Data:" />
 				
-				<h:inputText type="date" value="#{notaFiscalMB.notaFiscal.data}" pattern="dd/MM/yyyy"/>
+				<h:inputText id="data" type="date" value="#{notaFiscalMB.notaFiscal.data}"
+					required="true" requiredMessage="Informe a data da nota fiscal.">
+				
+				<f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+
+				</h:inputText>
 				
 			</fieldset>
 			<h:commandButton value="Gravar" action="#{notaFiscalMB.grava}" />
@@ -27,6 +33,7 @@
 		</p:tab>
 		<p:tab title="Dados do item">
 		<h:form id="item">
+		<h:messages styleClass="erros" />
 			<fieldset>
 				<legend>Dados do item</legend>
 				<h:outputLabel value="Produto:" />

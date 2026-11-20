@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="primefaces">
+
+<ui:composition template="/_template.xhtml">
+
+    <ui:define name="corpo">
+
+        <h:form id="listaNotas">
+
+            <h2>Listagem de Notas Fiscais</h2>
+
+            <p:dataTable
+                value="#{notaFiscalMB.notasFiscais}"
+                var="nota"
+                rowKey="#{nota.id}"
+                rows="5"
+                paginator="true"
+                emptyMessage="Nenhuma nota fiscal cadastrada.">
+
+                <p:column style="width:40px">
+                    <p:rowToggler />
+                </p:column>
+
+                <p:column headerText="Número">
+                    #{nota.id}
+                </p:column>
+
+                <p:column headerText="CNPJ">
+                    #{nota.cnpj}
+                </p:column>
+
+                <p:column headerText="Data">
+                    <h:outputText value="#{nota.data}">
+                        <f:convertDateTime
+                            type="localDate"
+                            pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Valor Total">
+                    <h:outputText
+                        value="#{notaFiscalMB.calcularTotal(nota)}">
+                        <f:convertNumber
+                            type="currency"
+                            locale="pt_BR"
+                            currencySymbol="R$ "/>
+                    </h:outputText>
+                </p:column>
+
+                <p:rowExpansion>
+
+                    <h3>Itens da Nota #{nota.id}</h3>
+
+                    <p:dataTable
+                        value="#{nota.itens}"
+                        var="item"
+                        emptyMessage="Nenhum item encontrado.">
+
+                        <p:column headerText="Produto">
+                            #{item.produto.nome}
+                        </p:column>
+
+                        <p:column headerText="Quantidade">
+                            #{item.quantidade}
+                        </p:column>
+
+                        <p:column headerText="Valor Unitário">
+                            <h:outputText value="#{item.valorUnitario}">
+                                <f:convertNumber
+                                    type="currency"
+                                    locale="pt_BR"
+                                    currencySymbol="R$ "/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Subtotal">
+                            <h:outputText value="#{item.total}">
+                                <f:convertNumber
+                                    type="currency"
+                                    locale="pt_BR"
+                                    currencySymbol="R$ "/>
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:rowExpansion>
+
+            </p:dataTable>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+</html>

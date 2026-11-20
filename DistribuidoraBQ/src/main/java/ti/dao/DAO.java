@@ -3,6 +3,7 @@ package ti.dao;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.criteria.CriteriaQuery;
 
 public class DAO<T> {
@@ -12,12 +13,36 @@ public class DAO<T> {
 		this.classe = classe;
 	}
 	
-	public void adiciona(T t) {
-		EntityManager em = new JPAUtil().getEntityManager();
-		em.getTransaction().begin();
-		em.persist(t);
-		em.getTransaction().commit();
-		em.close();
+	public boolean adiciona(T t) {
+
+	    EntityManager em = new JPAUtil().getEntityManager();
+	    EntityTransaction transacao = em.getTransaction();
+
+	    try {
+	        transacao.begin();
+	        em.persist(t);
+	        transacao.commit();
+
+	        return true;
+
+	    } catch (RuntimeException e) {
+
+	        if (transacao.isActive()) {
+	            try {
+	                transacao.rollback();
+	            } catch (RuntimeException erroRollback) {
+	                e.addSuppressed(erroRollback);
+	            }
+	        }
+
+	        // Para diagnóstico durante o desenvolvimento.
+	        e.printStackTrace();
+
+	        return false;
+
+	    } finally {
+	        em.close();
+	    }
 	}
 	
 	public void remove(T t) {
@@ -47,6 +72,12 @@ public class DAO<T> {
 	
 	public T buscaPorId(Long id) {
 		EntityManager em = new JPAUtil().getEntityManager();
-		return (T) em.find(classe, id);
+
+		try {
+			return em.find(classe, id);
+		} finally {
+			em.close();
+		}
+		
 	}
 }
