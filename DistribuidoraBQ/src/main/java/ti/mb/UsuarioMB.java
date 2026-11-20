@@ -3,6 +3,7 @@ package ti.mb;
 import java.io.Serializable;
 
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import ti.dao.UsuarioDAO;
 import ti.modelo.Usuario;
@@ -29,6 +30,11 @@ public class UsuarioMB implements Serializable{
 			this.usuario = new Usuario();
 			return "login?faces-redirect=true";
 		}
+	}
+	
+	public String logout() { 
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+	    return "login?faces-redirect=true";
 	}
 			
 	public Usuario getUsuario() {

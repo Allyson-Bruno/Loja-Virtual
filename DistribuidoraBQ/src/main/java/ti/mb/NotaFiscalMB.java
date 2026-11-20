@@ -87,14 +87,12 @@ public class NotaFiscalMB implements Serializable{
 		//Verifica se o produto foi selecionado.
 		if (idProduto == null) {
 			mensagemErro("Selecione um produto.");
-			
 			return;
 		}
 		
 		//Verifica se a quantidade é valida.
 		if (itemNota.getQuantidade() == null || itemNota.getQuantidade() <= 0) {
 			mensagemErro("Informe uma quantidade maior que zero.");
-		
 			return;
 		}
 		
@@ -104,6 +102,7 @@ public class NotaFiscalMB implements Serializable{
 		//Verifica se o produto existe no banco.
 		if (produto == null) {
 			mensagemErro("Produto não encontrado.");
+			return;
 		}
 		
 		//Verifica o preço.
