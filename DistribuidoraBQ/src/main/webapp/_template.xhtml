@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:p="primefaces">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Distribuidora</title>
+	<h:outputStylesheet name="style.css" library="css"></h:outputStylesheet>	
+</h:head>
+<h:body>
+	<header id="cabecalho">
+		<h1>
+			<a href="produto.xhtml" id="logo">Loja Virtual</a>
+		</h1>
+	</header>
+	<main id="conteudo">
+		<h:form rendered="#{not empty usuarioMB.usuario.login}">
+		 <p:menubar>
+			 <p:menuitem value="Produtos" url="produto.xhtml"/>
+			 <p:submenu label="Notas Fiscais">
+			 <p:menuitem value="Cadastro" url="notafiscal.xhtml"/>
+			 <p:menuitem value="Listagem" url="listanotas.xhtml"/>
+			 </p:submenu>
+			 <p:menuitem value="Sair" action="#{loginBean.logout}"/>
+			 </p:menubar>
+		 </h:form>
+		<ui:insert name="corpo"></ui:insert>
+	</main>
+	<footer id="rodape">Copyright 2026. Todos os Direitos reservados a Fulano.</footer>
+</h:body>
+</html>

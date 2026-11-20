@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="primefaces">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="corpo">
+		<h:outputScript name="jsf.js" library="javax.faces" target="head"></h:outputScript>
+		<h:form id="cadastro">
+			<h:messages styleClass="erros" />
+			<h2>
+				<h:outputText value="Novo Produto"
+					rendered="#{empty produtoMB.produto.id}" />
+				<h:outputText value="Editar Produto"
+					rendered="#{not empty produtoMB.produto.id}" />
+			</h2>
+			<fieldset>
+				<legend>Dados do Produto</legend>
+				<h:outputLabel value="Nome" for="nome" />
+				<h:inputText id="nome" value="#{produtoMB.produto.nome}">
+					<f:validator validatorId="comecaComMaiuscula"></f:validator>
+				</h:inputText>
+				<h:outputLabel value="Descrição" for="descricao" />
+				<h:inputText id="descricao" value="#{produtoMB.produto.descricao}"></h:inputText>
+				<h:outputLabel value="Preço" for="preco"></h:outputLabel>
+				<h:inputText type="number" id="preco"
+					value="#{produtoMB.produto.preco}" required="true"
+					requiredMessage="Campo Preço é obrigatório"></h:inputText>
+				
+
+				<h:commandButton value="Gravar" action="#{produtoMB.grava}"
+					style="display: inline">
+					<f:ajax execute="@form" render=":lista :cadastro" />
+				</h:commandButton>
+				<h:commandButton value="Cancelar" action="#{produtoMB.cancela}"
+					rendered="#{not empty produtoMB.produto.nome}"
+					style="display: inline; margin-left: 8px; ">
+					<f:ajax execute="@form" render=":cadastro" />
+				</h:commandButton>
+			</fieldset>
+		</h:form>
+		<h:form id="lista">
+			<h2>Lista de Produtos</h2>
+			<p:dataTable value="#{produtoMB.produtos}" var="p" styleClass="dados"
+				rowClasses="impar, par" rows="5" paginator="true"
+				paginatorPosition="both"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+				rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+				<p:column headerText="Nome">					
+					#{p.nome}
+				</p:column>
+				<p:column>
+					<f:facet name="header">Decrição</f:facet>
+				#{p.descricao}
+			</p:column>
+				<p:column>
+					<f:facet name="header">Preço</f:facet>
+				#{p.preco}
+			</p:column>
+				<p:column>
+					<f:facet name="header">Ações</f:facet>
+					<h:commandLink styleClass="btnacao">
+						<h:graphicImage title="Editar" alt="Editar"
+							url="resources/imagens/edit.png" styleClass="btnacao" />
+						<f:ajax render=":cadastro"></f:ajax>
+						<f:setPropertyActionListener value="#{p}"
+							target="#{produtoMB.produto}"></f:setPropertyActionListener>
+					</h:commandLink>
+					<h:commandLink action="#{produtoMB.remove(p)}" styleClass="btnacao">
+						<h:graphicImage title="Remover" alt="Remover"
+							url="resources/imagens/delete.png" styleClass="btnacao" />
+					</h:commandLink>					
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
